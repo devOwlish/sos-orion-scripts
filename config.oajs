@@ -1,0 +1,23 @@
+const _global = {
+    "verbose": true,
+}
+
+const _healing = {
+    "threshold": 95,
+    "statusBar": {
+        "x": 400,
+        "y": 500,
+    }
+};
+
+const _attack = {
+    "follow": false,
+    "statusBar": {
+        "x": 650,
+        "y": 380,
+    }
+}
+
+const _buffs = {
+    "healing": 0x761b,
+}

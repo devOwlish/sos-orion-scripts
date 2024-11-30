@@ -1,0 +1,59 @@
+//#include config.oajs
+
+const _reagents = [
+	0x0F7B, // bm
+	0x0F7A, // bp
+	0x0F84, // ga
+	0x0F85, // gs
+	0x0F86, // mr
+	0x0F88, // ns
+	0x0F8C, // sa
+	0x0F8D, // ss
+	0x0F87, // en
+];
+
+function getPercentValue(value, percent) {
+	return value / 100 * percent
+}
+
+function ensureContainerOpened(serial, bank) {
+	var isBank = bank === undefined ? false : true;
+	var cnt = 0;
+	print("IsBank? " + isBank, true);
+	while (cnt < 5) {
+		cnt++;
+		print("Try #" + cnt, true);
+
+		if (isBank) {
+			Orion.Say("bank");
+		} else {
+			Orion.UseObject(serial);
+		}
+
+		Orion.Wait(1000);
+		if (Orion.GetSerial("lastcontainer") == serial) {
+			print("Container " + serial + " opened", true);
+			return true;
+		}
+		print("Failed to open container " + serial, true);
+	}
+
+	return false;
+}
+
+
+function print(msg, debug) {
+	var debug = debug === undefined ? false : true;
+	if (_global["verbose"] && debug) {
+		Orion.Print(0x0006, "[DEBUG] [" + arguments.callee.caller.name + "] " + msg, true)
+		return;
+	}
+
+	if (!debug) {
+		Orion.Print(0x0035, "[" + arguments.callee.caller.name + "] " + msg);
+	}
+}
+
+function charPrint(msg) {
+	Orion.CharPrint(Player.Serial(), 0x0035, msg);
+}

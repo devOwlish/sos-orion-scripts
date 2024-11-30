@@ -1,0 +1,36 @@
+//#include ../helpers.oajs
+
+const _bs = {
+    "hammer": 0x13E4,
+    "ingot": 0x1BF2,
+    // Make Last
+    "button": 21,
+    "smeltButton": 14,
+    "type": 0x1413
+}
+
+function train() {
+    while (!Player.Dead()) {
+        if (!Orion.FindType(_bs["hammer"]).length > 0 || !Orion.FindType(_bs["ingot"]).length > 0) {
+            print("train", "No hammers or ingots");
+            Orion.PauseScript();
+        }
+
+        print("train", "Crafting..")
+        craft(_bs["hammer"], _bs["button"]);
+
+        var items = Orion.FindType(_bs["type"]);
+        if (items.length > 0) {
+            items.forEach(function (item) {
+                print("train", "Smelting...")
+                if (Orion.HaveTarget())
+                    Orion.CancelTarget();
+                Orion.CancelWaitTarget();
+                Orion.WaitTargetObject(item);
+
+                craft(_bs["hammer"], _bs["smeltButton"]);
+                Orion.Wait(1000);
+            });
+        }
+    }
+}

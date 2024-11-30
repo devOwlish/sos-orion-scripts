@@ -1,0 +1,18 @@
+//#include config.oajs
+//#include combat.oajs
+
+
+function Autostart() {
+    Orion.ClientOptionSet("AlwaysRun", 1);
+    Orion.ClientOptionSet("BlockRunWhileHidden", 1);
+	Orion.Exec("AutoHealSelf", true)
+    //Orion.Exec("ToggleSpell", true, ["Lightning Strike"])
+}
+
+function test(){
+
+    Orion.InfoBuff();
+    if (Orion.BuffExists(0x761b)){
+        Orion.Print("Healing...")
+    }
+}
