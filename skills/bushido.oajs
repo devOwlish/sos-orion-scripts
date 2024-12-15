@@ -1,7 +1,7 @@
 function TrainBushido(){
     while(!Player.Dead()) {
         if (Player.Mana() > 9) {
-          Orion.Cast('404');
+          Orion.Cast('Evasion');
             Orion.Wait(2000);
         }
     }

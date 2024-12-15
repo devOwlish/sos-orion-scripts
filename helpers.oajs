@@ -57,3 +57,4 @@ function print(msg, debug) {
 function charPrint(msg) {
 	Orion.CharPrint(Player.Serial(), 0x0035, msg);
 }
+

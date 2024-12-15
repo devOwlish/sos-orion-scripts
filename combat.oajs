@@ -26,7 +26,7 @@ function AutoHealSelf() {
     while (true) {
         while (!Player.Dead() && (Player.Hits() < (getPercentValue(Player.MaxHits(), _healing["threshold"])) || Player.Poisoned())) {
             Orion.Say("[bandself");
-            Orion.Wait(100);
+            Orion.Wait(200);
 
             if (Orion.BuffExists(_buffs["healing"]) && Orion.BuffTimeRemaining(_buffs["healing"])) {
 
@@ -36,7 +36,7 @@ function AutoHealSelf() {
                     "LineBar",
                     "Healing...",
                     _healing["statusBar"]["x"],
-                    _healing["statusBar"]["x"]
+                    _healing["statusBar"]["y"]
                 );
                 Orion.DisplayTimerSetIcon("healing", "Left", "0x0E21");
                 Orion.DisplayTimerSetSize("healing", 100, 30);

@@ -7,14 +7,20 @@ const _lockpicking = {
 }
 
 function isLocked(serial) {
-    const box = Orion.FindObject(serial);
-    return Orion.Contains(box.Properties(), "Lock");
+    Orion.UseObject(serial);
+    Orion.Wait(1000);
+    if (Orion.WaitJournal("locked", Orion.Now() - 1000, Orion.Now() + 1000, "item")) {
+        return true;
+    }
+
+    return false
 }
 
-function train() {
+function Lockpicking() {
     while (!Player.Dead()) {
         var lockpicks = Orion.FindType(_lockpicking["pick"]);
         var boxes = Orion.FindType(_lockpicking["box"]);
+
         if (lockpicks.length < 1 || boxes.length < 1) {
             print("No lockpicks or box found");
             Orion.PauseScript();

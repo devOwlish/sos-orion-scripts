@@ -5,16 +5,16 @@ const _global = {
 const _healing = {
     "threshold": 95,
     "statusBar": {
-        "x": 400,
-        "y": 500,
+        "x": 450,
+        "y": 550,
     }
 };
 
 const _attack = {
     "follow": false,
     "statusBar": {
-        "x": 650,
-        "y": 380,
+        "x": 750,
+        "y": 550,
     }
 }
 

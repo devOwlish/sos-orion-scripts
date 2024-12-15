@@ -1,18 +1,17 @@
 //#include config.oajs
 //#include combat.oajs
-
+// Include nested scripts to make them available from the autoload file
+//#include skills/hiding.oajs
+//#include skills/lockpicking.oajs
 
 function Autostart() {
     Orion.ClientOptionSet("AlwaysRun", 1);
     Orion.ClientOptionSet("BlockRunWhileHidden", 1);
 	Orion.Exec("AutoHealSelf", true)
-    //Orion.Exec("ToggleSpell", true, ["Lightning Strike"])
+    Orion.Exec("ToggleSpell", true, ["Lightning Strike"])
+    // Orion.Exec("ToggleSpell", true, ["Momentum Strike"])
 }
 
 function test(){
-
-    Orion.InfoBuff();
-    if (Orion.BuffExists(0x761b)){
-        Orion.Print("Healing...")
-    }
+    isLocked(0x41039A60)
 }
