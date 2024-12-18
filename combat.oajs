@@ -87,10 +87,18 @@ function CastChivalry() {
     });
 
     while (true) {
+
+        Orion.GetStatus(Player.Serial());
+        if (Player.Stam() < 50 && Player.Mana() > 10 && !Orion.BuffExists(0x754d)) {
+            print("Regenerating stamina");
+            Orion.Cast("Divine Fury");
+            Orion.Wait(10000)
+        }
+
         Object.keys(spells).forEach(function (key) {
             if (!Player.Dead() && Player.Mana() > 10 && !Orion.BuffExists(spells[key])) {
                 Orion.Cast(key);
-                Orion.Wait(1000);
+                Orion.Wait(10000);
             }
         });
         Orion.Wait(100);
