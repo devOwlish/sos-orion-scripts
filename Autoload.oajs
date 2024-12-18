@@ -7,11 +7,38 @@
 function Autostart() {
     Orion.ClientOptionSet("AlwaysRun", 1);
     Orion.ClientOptionSet("BlockRunWhileHidden", 1);
-	Orion.Exec("AutoHealSelf", true)
-    Orion.Exec("ToggleSpell", true, ["Lightning Strike"])
+    Orion.Exec("AutoHealSelf", true);
+    Orion.Exec("CastBushido", true, ["Lightning Strike", "Confidence"]);
+    Orion.Exec("CastChivalry", true);
+    Orion.Exec("WeaponLevelingStats", true);
+
+
     // Orion.Exec("ToggleSpell", true, ["Momentum Strike"])
 }
 
-function test(){
-    isLocked(0x41039A60)
+
+function test() {
+    print(Orion.BuffExists(0x75f6));
+}
+
+function Fight() {
+    const target = 0x00047A9F;
+    const safeX = 1073;
+    const safeY = 1558;
+    enemy = Orion.FindObject(target);
+
+    while (true) {
+        if (enemy) {
+            while (enemy.Hits() < 20) {
+                Orion.WalkTo(safeX, safeY, enemy.Z());
+                Orion.Wait(1000);
+                print("Waiting...");
+            }
+
+            Orion.WalkTo(enemy.X(), enemy.Y(), 1);
+            Orion.Attack(target);
+            Orion.Wait(500);
+        }
+        Orion.Wait(100);
+    }
 }

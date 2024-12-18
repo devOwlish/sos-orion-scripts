@@ -18,7 +18,7 @@ function AttackTarget(targetSerial) {
 }
 
 function Attack() {
-  AttackTarget(Orion.TargetSystemSerial());
+    AttackTarget(Orion.TargetSystemSerial());
 }
 
 function AutoHealSelf() {
@@ -55,39 +55,89 @@ function AutoHealSelf() {
     }
 }
 
-function ToggleSpell(spellName) {
-    print("Started")
-    print("Spell: " + spellName)
+function CastBushido() {
+    print("Started, casting spells:");
+    var spells = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+        spells.push(arguments[i]);
+        print(">> " + arguments[i]);
+    }
+
     while (true) {
-        if (!Player.Dead() && Player.Mana() > 5 && !Orion.SpellStatus(spellName)) {
-            Orion.Cast(spellName);
-            Orion.Wait(500);
-        }
+        spells.forEach(function (spell) {
+            if (!Player.Dead() && Player.Mana() > 5 && !Orion.SpellStatus(spell)) {
+                Orion.Cast(spell);
+                Orion.Wait(500);
+            }
+        });
+
         Orion.Wait(100);
     }
 }
 
-function ToggleAbility(abilityName) {
-    print("Started")
-    print("Ability: " + abilityName)
+function CastChivalry() {
+    spells = {
+        "Consecrate Weapon": 0x75f6,
+    }
+
+    print("Started, casting spells:");
+    Object.keys(spells).forEach(function (key) {
+        print(">>> " + key + ", buff -> "+ spells[key]);
+    });
+
     while (true) {
-        if (!Player.Dead() && Player.Mana() > 5 && !Orion.AbilityStatus(abilityName)) {
-            Orion.UseAbility(abilityName);
-            Orion.Wait(500);
-        }
+        Object.keys(spells).forEach(function (key) {
+            if (!Player.Dead() && Player.Mana() > 10 && !Orion.BuffExists(spells[key])) {
+                Orion.Cast(key);
+                Orion.Wait(1000);
+            }
+        });
         Orion.Wait(100);
     }
 }
 
-function SwapAttacks() {
-    if (Orion.ScriptRunning("ToggleAbility")) {
-        Orion.ToggleScript("ToggleAbility")
-        Orion.Exec("ToggleSpell", true, ["Lightning Strike"])
-        charPrint(" >> Now casting Lightning Strike")
-        return;
-    }
 
-    Orion.ToggleScript("ToggleSpell")
-    Orion.Exec("ToggleAbility", true, ["Primary"])
-    charPrint(" >> Now casting Secondary weapon ability")
+
+function getWeaponInfo(serial) {
+    var exp = 0;
+    var lvl = 0;
+    var object = Orion.FindObject(serial);
+    if (object != null) {
+        var properties = object.Properties();
+        var matchesExp = /Experience: (\d+)/.exec(properties);
+        var matcheslvl = /Level: (\d+)/.exec(properties);
+
+        if (matchesExp && matchesExp.length > 0)
+            var exp = parseInt(matchesExp[1]);
+
+        if (matcheslvl && matcheslvl.length > 0)
+            var lvl = parseInt(matcheslvl[1]);
+
+        return { "lvl": lvl, "exp": exp };
+    }
 }
+
+function WeaponLevelingStats() {
+    var weapon = "0x402AE1A5";
+
+    var started = new Date().getTime();
+    var totalExp = 0;
+    while (true) {
+
+        var startExp = getWeaponInfo(weapon)['exp'];
+        if (Orion.WaitJournal("Your weapon", Orion.Now(), Orion.Now() + 20000)) {
+            Orion.Wait(500);
+            var currentExp = getWeaponInfo(weapon)['exp'];
+            var currentLvl = getWeaponInfo(weapon)['lvl'];
+
+            var toNextLvl = 100 * Math.pow(currentLvl + 1, 2) - 100;
+            var totalExp = totalExp + (currentExp - startExp);
+            var minutes = ((new Date().getTime() - started) / 1000) / 60;
+            var expPerMinute = (totalExp / minutes).toFixed(2);
+            Orion.Print('0x0035', "Weapon exp : " + currentExp + "/" + toNextLvl + " (+" + (currentExp - startExp) + ") | "+ totalExp);
+            Orion.Print('0x0035', "Exp@minute : " + expPerMinute);
+        }
+    }
+}
+
